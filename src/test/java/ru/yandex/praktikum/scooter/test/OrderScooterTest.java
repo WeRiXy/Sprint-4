@@ -4,15 +4,15 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import ru.yandex.praktikum.scooter.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+
+import static org.apache.commons.lang3.time.DateUtils.addDays;
 
 
 @RunWith(Parameterized.class)
@@ -48,15 +48,15 @@ public class OrderScooterTest {
     public static Object[][] getCredentials() {
         return new Object[][] {
                 {"Кнопка Заказать - в шапке","Петр", "Петров", "Мира 1", "Лубянка", "12345678901",new SimpleDateFormat("dd.MM.yyyy").format(new Date()),"четверо суток","чёрный жемчуг","test"},
+                {"Кнопка Заказать - в шапке","Ив", "Мистер", "Мира 2", "Комсомольская", "12345678901",new SimpleDateFormat("dd.MM.yyyy").format(addDays(new Date(),1)),"сутки","серая безысходность",""},
         };
-          //      {"Светлана", "Света", "Светлая", "Лубянка", "12345678901"},
         }
 
     @Test
     public void HomeFAQTest() {
-        driver = new FirefoxDriver();
+       // driver = new FirefoxDriver();
         driver = new ChromeDriver();
-        //driver.get("https://qa-scooter.praktikum-services.ru/");
+        driver.get("https://qa-scooter.praktikum-services.ru/");
         HomePageScooter objHomePageScooter = new HomePageScooter(driver);
 
         if (orderButton.equals("Кнопка Заказать - в шапке")) {
@@ -85,7 +85,7 @@ public class OrderScooterTest {
      }
     @After
     public void teardown() {
-  //      driver.quit();
+         driver.quit();
     }
 }
 
