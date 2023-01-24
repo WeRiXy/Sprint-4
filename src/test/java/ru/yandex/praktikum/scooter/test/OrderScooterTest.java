@@ -4,22 +4,20 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import ru.yandex.praktikum.scooter.*;
+import java.lang.reflect.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-
 import static org.apache.commons.lang3.time.DateUtils.addDays;
-
 
 @RunWith(Parameterized.class)
 public class OrderScooterTest {
     private WebDriver driver;
-
-    private final String orderButton;
+    private final Method orderButton;
     private final String name;
     private final String surname;
     private final String address;
@@ -30,8 +28,7 @@ public class OrderScooterTest {
     private final String colour;
     private final String comment;
 
-
-    public OrderScooterTest(String orderButton, String name, String surname, String address, String metro, String telephone, String dateOfDelivery, String rent, String colour, String comment) {
+    public OrderScooterTest(Method orderButton, String name, String surname, String address, String metro, String telephone, String dateOfDelivery, String rent, String colour, String comment) {
         this.orderButton = orderButton;
         this.name = name;
         this.surname = surname;
@@ -45,26 +42,21 @@ public class OrderScooterTest {
     }
 
     @Parameterized.Parameters
-    public static Object[][] getCredentials() {
+    public static Object[][] getCredentials() throws NoSuchMethodException {
         return new Object[][] {
-                {"Кнопка Заказать - в шапке","Петр", "Петров", "Мира 1", "Лубянка", "12345678901",new SimpleDateFormat("dd.MM.yyyy").format(new Date()),"четверо суток","чёрный жемчуг","test"},
-                {"Кнопка Заказать - в шапке","Ив", "Мистер", "Мира 2", "Комсомольская", "12345678901",new SimpleDateFormat("dd.MM.yyyy").format(addDays(new Date(),1)),"сутки","серая безысходность",""},
+                {HomePageScooter.class.getDeclaredMethod("clickOrderHeaderButton"), "Петр", "Петров", "Мира 1", "Лубянка", "12345678901", new SimpleDateFormat("dd.MM.yyyy").format(new Date()), "четверо суток", "чёрный жемчуг", "test"},
+                {HomePageScooter.class.getDeclaredMethod("clickOrderFooterButton"),"Ив", "Мистер", "Мира 2", "Комсомольская", "12345678901",new SimpleDateFormat("dd.MM.yyyy").format(addDays(new Date(),1)),"сутки","серая безысходность",""},
         };
-        }
+    }
 
     @Test
-    public void HomeFAQTest() {
-       // driver = new FirefoxDriver();
+    public void orderScooterTest() throws InvocationTargetException, IllegalAccessException {
+        //driver = new FirefoxDriver();
         driver = new ChromeDriver();
         driver.get("https://qa-scooter.praktikum-services.ru/");
-        HomePageScooter objHomePageScooter = new HomePageScooter(driver);
 
-        if (orderButton.equals("Кнопка Заказать - в шапке")) {
-            objHomePageScooter.clickOrderHeaderButton();
-        }
-        else if (orderButton.equals("Кнопка Заказать - в контексте")) {
-            objHomePageScooter.clickOrderFooterButton();
-        }
+        HomePageScooter objHomePageScooter = new HomePageScooter(driver);
+        orderButton.invoke(objHomePageScooter);
 
         PageForWhomScooter objPageForWhomScooter = new PageForWhomScooter(driver);
         objPageForWhomScooter.waitForPageUploaded();

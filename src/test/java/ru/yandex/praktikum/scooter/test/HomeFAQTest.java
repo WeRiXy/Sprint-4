@@ -37,7 +37,7 @@ public class HomeFAQTest {
         };
     }
     @Test
-    public void HomeFAQTest() {
+    public void homeFAQTest() {
 
         driver = new ChromeDriver();
         driver.get("https://qa-scooter.praktikum-services.ru/");

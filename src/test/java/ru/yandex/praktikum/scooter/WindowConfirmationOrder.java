@@ -13,12 +13,13 @@ public class WindowConfirmationOrder {
     //Кнопка Нет
     private By noButton  = By.xpath(".//div[starts-with(@class,'Order_Modal')]//button[text()='Нет']");
 
+    public WindowConfirmationOrder(WebDriver driver) {
+        this.driver = driver;
+    }
+
     public void waitForWindowUploaded() {
         // здесь нужно дождаться, чтобы текст в элементе «Занятие» стал равен значению из параметра
         new WebDriverWait(driver, 3).until(ExpectedConditions.elementToBeClickable(yesButton));
-    }
-    public WindowConfirmationOrder(WebDriver driver) {
-        this.driver = driver;
     }
     //Нажатие кнопки Да
     public void clickYesButton() {
